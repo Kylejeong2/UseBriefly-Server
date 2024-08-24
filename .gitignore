@@ -1,2 +1,9 @@
 /app.log
 /__pycache__
+venv/
+/venv/
+.vscode/
+.vscode/
+
+venv copy/
+venv copy/
