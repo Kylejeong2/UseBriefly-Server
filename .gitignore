@@ -3,7 +3,4 @@
 venv/
 /venv/
 .vscode/
-.vscode/
-
-venv copy/
-venv copy/
+.env
