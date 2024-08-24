@@ -7,3 +7,4 @@ scrapegraphai
 playwright
 numpy
 gunicorn
+burr
