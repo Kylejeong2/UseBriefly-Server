@@ -85,5 +85,5 @@ def scrape_and_summarize():
 
 if __name__ == '__main__':
     logger.info("Starting Flask server")
-    port = int(os.getenv("PORT")) or 8000
+    port = int(os.getenv("PORT"))
     app.run(host='0.0.0.0', port=port)
