@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: flask-scraper-app
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: flask run --port 8000 --debug
+    envVars:
+      - key: PYTHON_SERVER_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: PORT
+        sync: false
