@@ -6,3 +6,4 @@ python-dotenv
 scrapegraphai
 playwright
 numpy
+gunicorn

@@ -3,7 +3,7 @@ services:
     name: flask-scraper-app
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: flask run
+    startCommand: gunicorn app:app
     envVars:
       - key: PYTHON_SERVER_API_KEY
         sync: false
