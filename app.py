@@ -5,6 +5,7 @@ import openai
 from flask import Flask, request, jsonify
 from functools import wraps
 from flask_cors import CORS
+from playwright.sync_api import sync_playwright
 
 load_dotenv()
 
@@ -36,13 +37,19 @@ def require_api_key(f):
     return decorated_function
 
 def scrape_website(url):
-    smart_scraper_graph = SmartScraperGraph(
-        prompt="You are an expert at summarizing and identifying key points in text. Locate the top 3 articles of the day on the website and summarize each of them. Make sure to capture only the key points and using only 3 sentences. Also, include the Full URL of each article (include prefix). The 'source' should be verbatim from the URL provided in the request which is the website that I'm giving you to scrape (!!!MUST BE THE URL with NO '/' at the end). The format of your summary response should look like this every time: {'top_articles': [{'title': '', 'summary': '', 'url': '', 'source': ''}, {'title': '', 'summary': '', 'url': '', 'source': ''}, {'title': '', 'summary': '', 'url': '', 'source': ''}]}",
-        source=url, 
-        config=graph_config,
-    )
-    result = smart_scraper_graph.run()
-    return result
+    with sync_playwright() as p:
+        browser = p.chromium.launch(
+            executable_path=os.environ.get('PLAYWRIGHT_CHROMIUM_PATH'),
+            args=['--no-sandbox', '--disable-setuid-sandbox']
+        )
+        page = browser.new_page()
+        smart_scraper_graph = SmartScraperGraph(
+            prompt="You are an expert at summarizing and identifying key points in text. Locate the top 3 articles of the day on the website and summarize each of them. Make sure to capture only the key points and using only 3 sentences. Also, include the Full URL of each article (include prefix). The 'source' should be verbatim from the URL provided in the request which is the website that I'm giving you to scrape (!!!MUST BE THE URL with NO '/' at the end). The format of your summary response should look like this every time: {'top_articles': [{'title': '', 'summary': '', 'url': '', 'source': ''}, {'title': '', 'summary': '', 'url': '', 'source': ''}, {'title': '', 'summary': '', 'url': '', 'source': ''}]}",
+            source=url, 
+            config=graph_config,
+        )
+        result = smart_scraper_graph.run()
+        return result
 
 @app.route('/scrape-and-summarize', methods=['POST'])
 @require_api_key

@@ -3,11 +3,9 @@
 # Install Python dependencies
 pip install -r requirements.txt
 
-# Install Playwright browsers
-playwright install chromium
+# Install system-level Chromium
+apt-get update && apt-get install -y chromium-browser
 
-# Ensure Playwright cache directory exists
-mkdir -p /opt/render/.cache/ms-playwright
-
-# Set Playwright browser path
-export PLAYWRIGHT_BROWSERS_PATH=/opt/render/.cache/ms-playwright
+# Set environment variables for Playwright
+export PLAYWRIGHT_CHROMIUM_PATH=$(which chromium-browser)
+export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
